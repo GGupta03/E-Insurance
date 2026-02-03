@@ -59,5 +59,26 @@ namespace E_Insurance_App.Repositories
 
             return users;
         }
-    } 
+        public bool CreateUser(User user)
+        {
+            string query = @"
+            INSERT INTO Users 
+            (FirstName, LastName, Email, PasswordHash, Role, IsActive)
+            VALUES
+            (@FirstName, @LastName, @Email, @PasswordHash, @Role, @IsActive)";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@FirstName", user.FirstName),
+                new SqlParameter("@LastName", user.LastName),
+                new SqlParameter("@Email", user.Email),
+                new SqlParameter("@PasswordHash", user.PasswordHash),
+                new SqlParameter("@Role", user.Role),
+                new SqlParameter("@IsActive", user.IsActive)
+            };
+
+            return _db.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+    }
 }

@@ -13,7 +13,7 @@ namespace E_Insurance_App.Controllers
         {
             _userRepository = userRepository;
         }
-
+       
         // GET: /Account/Login
         [HttpGet]
         public IActionResult Login()
@@ -27,9 +27,14 @@ namespace E_Insurance_App.Controllers
         public IActionResult Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
-
+            {
+                return Content("ModelState Invalid");
+            }
             var user = _userRepository.GetUserByEmail(model.Email);
+            if (user == null)
+            {
+                return Content("USER NOT FOUND");
+            }
 
             if (user == null || !user.IsActive)
             {
