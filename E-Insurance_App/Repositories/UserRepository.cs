@@ -31,6 +31,7 @@ namespace E_Insurance_App.Repositories
                 FirstName = row["FirstName"].ToString(),
                 LastName = row["LastName"].ToString(),
                 Email = row["Email"].ToString(),
+                PasswordHash = row["PasswordHash"].ToString(),
                 Role = row["Role"].ToString(),
                 IsActive = (bool)row["IsActive"]
             };
