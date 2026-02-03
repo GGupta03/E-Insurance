@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using E_Insurance_App.Models.ViewModels;
+using E_Insurance_App.Models.Entities;
 using E_Insurance_App.Repositories;
 using E_Insurance_App.Helpers;
 
@@ -28,13 +29,10 @@ namespace E_Insurance_App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Content("ModelState Invalid");
+                return View(model);
             }
+
             var user = _userRepository.GetUserByEmail(model.Email);
-            if (user == null)
-            {
-                return Content("USER NOT FOUND");
-            }
 
             if (user == null || !user.IsActive)
             {
@@ -66,6 +64,54 @@ namespace E_Insurance_App.Controllers
                 _ => RedirectToAction("Index", "Home")
             };
         }
+
+        // GET: /Account/Register
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: /Account/Register
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Check if email already exists
+            var existingUser = _userRepository.GetUserByEmail(model.Email);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("Email", "Email is already registered");
+                return View(model);
+            }
+
+            var user = new User
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PasswordHash = PasswordHelper.HashPassword(model.Password),
+                Role = "Customer",
+                IsActive = true
+            };
+
+            bool created = _userRepository.CreateUser(user);
+
+            if (!created)
+            {
+                ModelState.AddModelError("", "Unable to create account. Please try again.");
+                return View(model);
+            }
+
+            TempData["SuccessMessage"] = "Registration successful! Please login.";
+            return RedirectToAction("Login");
+        }
+
         public IActionResult AccessDenied()
         {
             return View();
