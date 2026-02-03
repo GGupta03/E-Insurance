@@ -1,6 +1,14 @@
-﻿namespace E_Insurance_App.Views.Admin
-{
-    public class Dashboard
-    {
-    }
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
 }
+
+<h2>Admin Dashboard</h2>
+
+<ul>
+    <li>
+        <a asp-controller="User" asp-action="Index">Manage Users</a>
+    </li>
+    <li>
+        <a asp-controller="Bank" asp-action="Index">Manage Banks</a>
+    </li>
+</ul>
