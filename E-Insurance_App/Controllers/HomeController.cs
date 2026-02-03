@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
+using E_Insurance_App.Filters;
 using E_Insurance_App.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace E_Insurance_App.Controllers
 {
@@ -16,6 +17,12 @@ namespace E_Insurance_App.Controllers
         {
             var admin = _userRepo.GetUserByEmail("admin@einsurance.com");
             ViewBag.Email = admin?.Email ?? "Not Found";
+            return View();
+        }
+
+        [AuthorizeRole]
+        public IActionResult Profile()
+        {
             return View();
         }
     }

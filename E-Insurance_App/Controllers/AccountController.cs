@@ -61,6 +61,10 @@ namespace E_Insurance_App.Controllers
                 _ => RedirectToAction("Index", "Home")
             };
         }
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
         // Logout
         public IActionResult Logout()

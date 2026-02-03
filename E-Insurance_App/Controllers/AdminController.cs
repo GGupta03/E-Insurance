@@ -1,6 +1,14 @@
-﻿namespace E_Insurance_App.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using E_Insurance_App.Filters;
+
+namespace E_Insurance_App.Controllers
 {
-    public class AdminController
+    [AuthorizeRole("Admin")]
+    public class AdminController : Controller
     {
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
     }
 }
