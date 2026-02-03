@@ -1,6 +1,37 @@
-﻿namespace E_Insurance_App.Views.User
-{
-    public class Index
-    {
-    }
+﻿@model List<E_Insurance_App.Models.Entities.User>
+
+@{
+    ViewData["Title"] = "Manage Users";
 }
+
+<h2>Manage Users</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FirstName @user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>
+                    @(user.IsActive ? "Active" : "Inactive")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Create New User</a>

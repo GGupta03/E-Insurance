@@ -36,5 +36,28 @@ namespace E_Insurance_App.Repositories
                 IsActive = (bool)row["IsActive"]
             };
         }
-    }
+        public List<User> GetAllUsers()
+        {
+            string query = "SELECT UserId, FirstName, LastName, Email, Role, IsActive FROM Users";
+
+            DataTable dt = _db.ExecuteQuery(query);
+
+            List<User> users = new List<User>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                users.Add(new User
+                {
+                    UserId = (int)row["UserId"],
+                    FirstName = row["FirstName"].ToString(),
+                    LastName = row["LastName"].ToString(),
+                    Email = row["Email"].ToString(),
+                    Role = row["Role"].ToString(),
+                    IsActive = (bool)row["IsActive"]
+                });
+            }
+
+            return users;
+        }
+    } 
 }
