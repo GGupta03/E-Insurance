@@ -105,6 +105,23 @@ namespace E_Insurance_App.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ToggleStatus(int id)
+        {
+            var user = _userRepository.GetUserById(id);
+
+            if (user == null)
+                return NotFound();
+
+            bool updated = _userRepository.UpdateUserStatus(id, !user.IsActive);
+
+            if (!updated)
+                return BadRequest();
+
+            return RedirectToAction("Index");
+        }
+
 
 
     }

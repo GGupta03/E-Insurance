@@ -27,7 +27,37 @@
                     @(user.IsActive ? "Active" : "Inactive")
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a>
+                    <!-- Edit -->
+                    <a asp-action="Edit"
+                       asp-route-id="@user.UserId"
+                       class="btn btn-sm btn-warning">
+                        Edit
+                    </a>
+
+                    <!-- Activate / Deactivate -->
+                    <form asp-action="ToggleStatus"
+                          asp-route-id="@user.UserId"
+                          method="post"
+                          style="display:inline;">
+                        @Html.AntiForgeryToken()
+
+                        @if (user.IsActive)
+                        {
+                            <button type="submit"
+                                    class="btn btn-sm btn-danger ms-2"
+                                    onclick="return confirm('Deactivate this user?');">
+                                Deactivate
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit"
+                                    class="btn btn-sm btn-success ms-2"
+                                    onclick="return confirm('Activate this user?');">
+                                Activate
+                            </button>
+                        }
+                    </form>
                 </td>
             </tr>
         }
