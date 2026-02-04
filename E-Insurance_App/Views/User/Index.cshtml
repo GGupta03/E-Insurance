@@ -1,4 +1,4 @@
-﻿@model List<E_Insurance_App.Models.Entities.User>
+﻿@model E_Insurance_App.Helpers.PaginationHelper<E_Insurance_App.Models.Entities.User>
 
 @{
     ViewData["Title"] = "Manage Users";
@@ -17,24 +17,20 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var user in Model.Items)
         {
             <tr>
                 <td>@user.FirstName @user.LastName</td>
                 <td>@user.Email</td>
                 <td>@user.Role</td>
+                <td>@(user.IsActive ? "Active" : "Inactive")</td>
                 <td>
-                    @(user.IsActive ? "Active" : "Inactive")
-                </td>
-                <td>
-                    <!-- Edit -->
                     <a asp-action="Edit"
                        asp-route-id="@user.UserId"
                        class="btn btn-sm btn-warning">
                         Edit
                     </a>
 
-                    <!-- Activate / Deactivate -->
                     <form asp-action="ToggleStatus"
                           asp-route-id="@user.UserId"
                           method="post"
@@ -44,16 +40,14 @@
                         @if (user.IsActive)
                         {
                             <button type="submit"
-                                    class="btn btn-sm btn-danger ms-2"
-                                    onclick="return confirm('Deactivate this user?');">
+                                    class="btn btn-sm btn-danger ms-2">
                                 Deactivate
                             </button>
                         }
                         else
                         {
                             <button type="submit"
-                                    class="btn btn-sm btn-success ms-2"
-                                    onclick="return confirm('Activate this user?');">
+                                    class="btn btn-sm btn-success ms-2">
                                 Activate
                             </button>
                         }
@@ -63,5 +57,21 @@
         }
     </tbody>
 </table>
+
+<!-- Pagination Controls -->
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@i">
+                    @i
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
 
 <a asp-action="Create" class="btn btn-primary">Create New User</a>

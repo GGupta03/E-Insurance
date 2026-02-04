@@ -18,11 +18,24 @@ namespace E_Insurance_App.Controllers
         }
 
         // GET: /User
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
-            var users = _userRepository.GetAllUsers();
-            return View(users);
+            int pageSize = 5;
+
+            var users = _userRepository.GetUsersPaged(page, pageSize);
+            int totalUsers = _userRepository.GetTotalUsersCount();
+
+            var model = new PaginationHelper<E_Insurance_App.Models.Entities.User>
+            {
+                Items = users,
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalRecords = totalUsers
+            };
+
+            return View(model);
         }
+
 
         [AuthorizeRole("Admin")]
         public IActionResult Create()

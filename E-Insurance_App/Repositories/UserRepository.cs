@@ -142,7 +142,47 @@ namespace E_Insurance_App.Repositories
 
             return _db.ExecuteNonQuery(query, parameters) > 0;
         }
+        public int GetTotalUsersCount()
+        {
+            string query = "SELECT COUNT(*) FROM Users";
+            return (int)_db.ExecuteScalar(query);
+        }
+        public List<User> GetUsersPaged(int page, int pageSize)
+        {
+            int offset = (page - 1) * pageSize;
 
+            string query = @"
+                SELECT UserId, FirstName, LastName, Email, Role, IsActive
+                FROM Users
+                ORDER BY UserId
+                OFFSET @Offset ROWS
+                FETCH NEXT @PageSize ROWS ONLY";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@Offset", offset),
+                new SqlParameter("@PageSize", pageSize)
+            };
+
+            DataTable dt = _db.ExecuteQuery(query, parameters);
+
+            List<User> users = new();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                users.Add(new User
+                {
+                    UserId = (int)row["UserId"],
+                    FirstName = row["FirstName"].ToString(),
+                    LastName = row["LastName"].ToString(),
+                    Email = row["Email"].ToString(),
+                    Role = row["Role"].ToString(),
+                    IsActive = (bool)row["IsActive"]
+                });
+            }
+
+            return users;
+        }
 
     }
 }
