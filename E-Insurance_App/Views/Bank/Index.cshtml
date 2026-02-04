@@ -13,6 +13,7 @@
             <th>IFSC</th>
             <th>Branch</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -23,6 +24,13 @@
                 <td>@bank.IFSC</td>
                 <td>@bank.Branch</td>
                 <td>@(bank.IsActive ? "Active" : "Inactive")</td>
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@bank.BankId"
+                       class="btn btn-sm btn-warning">
+                        Edit
+                    </a>
+                </td>
             </tr>
         }
     </tbody>

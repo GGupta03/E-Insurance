@@ -1,0 +1,42 @@
+﻿@model E_Insurance_App.Models.ViewModels.EditBankViewModel
+
+@{
+    ViewData["Title"] = "Edit Bank";
+}
+
+<h2>Edit Bank</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="BankId" />
+
+    <div class="mb-2">
+        <label asp-for="BankName"></label>
+        <input asp-for="BankName" class="form-control" />
+        <span asp-validation-for="BankName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="IFSC"></label>
+        <input asp-for="IFSC" class="form-control" />
+        <span asp-validation-for="IFSC" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Branch"></label>
+        <input asp-for="Branch" class="form-control" />
+        <span asp-validation-for="Branch" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2 form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label">Active</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

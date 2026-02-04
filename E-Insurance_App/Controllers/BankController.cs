@@ -66,5 +66,51 @@ namespace E_Insurance_App.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult Edit(int id)
+        {
+            var bank = _bankRepository.GetBankById(id);
+
+            if (bank == null)
+                return NotFound();
+
+            var model = new E_Insurance_App.Models.ViewModels.EditBankViewModel
+            {
+                BankId = bank.BankId,
+                BankName = bank.BankName,
+                IFSC = bank.IFSC,
+                Branch = bank.Branch,
+                IsActive = bank.IsActive
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(E_Insurance_App.Models.ViewModels.EditBankViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var bank = new E_Insurance_App.Models.Entities.Bank
+            {
+                BankId = model.BankId,
+                BankName = model.BankName,
+                IFSC = model.IFSC,
+                Branch = model.Branch,
+                IsActive = model.IsActive
+            };
+
+            bool updated = _bankRepository.UpdateBank(bank);
+
+            if (!updated)
+            {
+                ModelState.AddModelError("", "Unable to update bank");
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

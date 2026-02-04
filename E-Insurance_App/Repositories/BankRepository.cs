@@ -66,6 +66,52 @@ namespace E_Insurance_App.Repositories
 
             return _db.ExecuteNonQuery(query, parameters) > 0;
         }
+        public Bank GetBankById(int bankId)
+        {
+            string query = "SELECT * FROM Banks WHERE BankId = @BankId";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@BankId", bankId)
+            };
+
+            DataTable dt = _db.ExecuteQuery(query, parameters);
+
+            if (dt.Rows.Count == 0)
+                return null;
+
+            var row = dt.Rows[0];
+
+            return new Bank
+            {
+                BankId = (int)row["BankId"],
+                BankName = row["BankName"].ToString(),
+                IFSC = row["IFSC"].ToString(),
+                Branch = row["Branch"].ToString(),
+                IsActive = (bool)row["IsActive"]
+            };
+        }
+        public bool UpdateBank(Bank bank)
+        {
+            string query = @"
+                UPDATE Banks
+                SET BankName = @BankName,
+                    IFSC = @IFSC,
+                    Branch = @Branch,
+                    IsActive = @IsActive
+                WHERE BankId = @BankId";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@BankName", bank.BankName),
+                new SqlParameter("@IFSC", bank.IFSC),
+                new SqlParameter("@Branch", bank.Branch),
+                new SqlParameter("@IsActive", bank.IsActive),
+                new SqlParameter("@BankId", bank.BankId)
+            };
+
+            return _db.ExecuteNonQuery(query, parameters) > 0;
+        }
 
     }
 }
