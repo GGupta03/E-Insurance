@@ -1,6 +1,47 @@
-﻿namespace E_Insurance_App.Views.Bank
-{
-    public class Index
-    {
-    }
+﻿@model E_Insurance_App.Helpers.PaginationHelper<E_Insurance_App.Models.Entities.Bank>
+
+@{
+    ViewData["Title"] = "Manage Banks";
 }
+
+<h2>Manage Banks</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Bank Name</th>
+            <th>IFSC</th>
+            <th>Branch</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bank in Model.Items)
+        {
+            <tr>
+                <td>@bank.BankName</td>
+                <td>@bank.IFSC</td>
+                <td>@bank.Branch</td>
+                <td>@(bank.IsActive ? "Active" : "Inactive")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@i">
+                    @i
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<a asp-action="Create" class="btn btn-primary">Add New Bank</a>

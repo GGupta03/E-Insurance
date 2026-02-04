@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<DbHelper>();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<BankRepository>();
 
 builder.Services.AddSession(options =>
 {
