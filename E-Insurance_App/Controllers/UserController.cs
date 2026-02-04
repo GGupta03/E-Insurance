@@ -58,6 +58,54 @@ namespace E_Insurance_App.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult Edit(int id)
+        {
+            var user = _userRepository.GetUserById(id);
+
+            if (user == null)
+                return NotFound();
+
+            var model = new EditUserViewModel
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role,
+                IsActive = user.IsActive
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(EditUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = new User
+            {
+                UserId = model.UserId,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Role = model.Role,
+                IsActive = model.IsActive
+            };
+
+            bool updated = _userRepository.UpdateUser(user);
+
+            if (!updated)
+            {
+                ModelState.AddModelError("", "Unable to update user");
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
 
     }
 }

@@ -79,6 +79,53 @@ namespace E_Insurance_App.Repositories
 
             return _db.ExecuteNonQuery(query, parameters) > 0;
         }
+        public User GetUserById(int userId)
+        {
+            string query = "SELECT * FROM Users WHERE UserId = @UserId";
+
+            SqlParameter[] parameters =
+            {
+                 new SqlParameter("@UserId", userId)
+            };
+
+            DataTable dt = _db.ExecuteQuery(query, parameters);
+
+            if (dt.Rows.Count == 0)
+                return null;
+
+            var row = dt.Rows[0];
+
+            return new User
+            {
+                UserId = (int)row["UserId"],
+                FirstName = row["FirstName"].ToString(),
+                LastName = row["LastName"].ToString(),
+                Email = row["Email"].ToString(),
+                Role = row["Role"].ToString(),
+                IsActive = (bool)row["IsActive"]
+            };
+        }
+        public bool UpdateUser(User user)
+        {
+            string query = @"
+                UPDATE Users
+                SET FirstName = @FirstName,
+                    LastName = @LastName,
+                    Role = @Role,
+                    IsActive = @IsActive
+                WHERE UserId = @UserId";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@FirstName", user.FirstName),
+                new SqlParameter("@LastName", user.LastName),
+                new SqlParameter("@Role", user.Role),
+                new SqlParameter("@IsActive", user.IsActive),
+                new SqlParameter("@UserId", user.UserId)
+            };
+
+            return _db.ExecuteNonQuery(query, parameters) > 0;
+        }
 
     }
 }
