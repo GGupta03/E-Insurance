@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using E_Insurance_App.Filters;
-using E_Insurance_App.Repositories;
+﻿using E_Insurance_App.Filters;
 using E_Insurance_App.Helpers;
 using E_Insurance_App.Models.Entities;
+using E_Insurance_App.Models.ViewModels;
+using E_Insurance_App.Repositories;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace E_Insurance_App.Controllers
 {
@@ -37,6 +39,32 @@ namespace E_Insurance_App.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(CreateBankViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var bank = new Bank
+            {
+                BankName = model.BankName,
+                IFSC = model.IFSC,
+                Branch = model.Branch,
+                IsActive = true
+            };
+
+            bool created = _bankRepository.CreateBank(bank);
+
+            if (!created)
+            {
+                ModelState.AddModelError("", "Unable to create bank");
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

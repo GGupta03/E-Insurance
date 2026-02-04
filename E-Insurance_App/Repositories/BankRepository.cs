@@ -50,5 +50,22 @@ namespace E_Insurance_App.Repositories
 
             return banks;
         }
+
+        public bool CreateBank(Bank bank)
+        {
+            string query = @"
+                INSERT INTO Banks (BankName, IFSC, Branch, IsActive)
+                VALUES (@BankName, @IFSC, @Branch, 1)";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@BankName", bank.BankName),
+                new SqlParameter("@IFSC", bank.IFSC),
+                new SqlParameter("@Branch", bank.Branch)
+            };
+
+            return _db.ExecuteNonQuery(query, parameters) > 0;
+        }
+
     }
 }

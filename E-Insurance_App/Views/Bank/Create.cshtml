@@ -1,6 +1,36 @@
-﻿namespace E_Insurance_App.Views.Bank
-{
-    public class Create
-    {
-    }
+﻿@model E_Insurance_App.Models.ViewModels.CreateBankViewModel
+
+@{
+    ViewData["Title"] = "Create Bank";
+}
+
+<h2>Create Bank</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-2">
+        <label asp-for="BankName"></label>
+        <input asp-for="BankName" class="form-control" />
+        <span asp-validation-for="BankName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="IFSC"></label>
+        <input asp-for="IFSC" class="form-control" />
+        <span asp-validation-for="IFSC" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Branch"></label>
+        <input asp-for="Branch" class="form-control" />
+        <span asp-validation-for="Branch" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
