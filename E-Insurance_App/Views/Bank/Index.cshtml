@@ -30,6 +30,30 @@
                        class="btn btn-sm btn-warning">
                         Edit
                     </a>
+
+                    <form asp-action="ToggleStatus"
+                          asp-route-id="@bank.BankId"
+                          method="post"
+                          style="display:inline;">
+                        @Html.AntiForgeryToken()
+
+                        @if (bank.IsActive)
+                        {
+                            <button type="submit"
+                                    class="btn btn-sm btn-danger ms-2"
+                                    onclick="return confirm('Deactivate this bank?');">
+                                Deactivate
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit"
+                                    class="btn btn-sm btn-success ms-2"
+                                    onclick="return confirm('Activate this bank?');">
+                                Activate
+                            </button>
+                        }
+                    </form>
                 </td>
             </tr>
         }

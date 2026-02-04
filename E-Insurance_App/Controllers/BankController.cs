@@ -112,5 +112,22 @@ namespace E_Insurance_App.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ToggleStatus(int id)
+        {
+            var bank = _bankRepository.GetBankById(id);
+
+            if (bank == null)
+                return NotFound();
+
+            bool updated = _bankRepository.UpdateBankStatus(id, !bank.IsActive);
+
+            if (!updated)
+                return BadRequest();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

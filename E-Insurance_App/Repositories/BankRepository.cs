@@ -112,6 +112,21 @@ namespace E_Insurance_App.Repositories
 
             return _db.ExecuteNonQuery(query, parameters) > 0;
         }
+        public bool UpdateBankStatus(int bankId, bool isActive)
+        {
+            string query = @"
+                UPDATE Banks
+                SET IsActive = @IsActive
+                WHERE BankId = @BankId";
+
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@IsActive", isActive),
+                new SqlParameter("@BankId", bankId)
+            };
+
+            return _db.ExecuteNonQuery(query, parameters) > 0;
+        }
 
     }
 }
