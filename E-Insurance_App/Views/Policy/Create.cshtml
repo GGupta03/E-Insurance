@@ -1,0 +1,54 @@
+﻿@model E_Insurance_App.Models.ViewModels.CreatePolicyViewModel
+
+<h2>Create Policy</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-2">
+        <label asp-for="PolicyName"></label>
+        <input asp-for="PolicyName" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="PolicyCategory"></label>
+        <input asp-for="PolicyCategory" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="BasePremium"></label>
+        <input asp-for="BasePremium" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="InterestRate"></label>
+        <input asp-for="InterestRate" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="MinAge"></label>
+        <input asp-for="MinAge" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="MaxAge"></label>
+        <input asp-for="MaxAge" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="TermYears"></label>
+        <input asp-for="TermYears" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">
+        Create Policy
+    </button>
+
+    <a asp-action="ManagePolicies"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

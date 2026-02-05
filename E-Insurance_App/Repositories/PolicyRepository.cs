@@ -54,5 +54,30 @@ namespace E_Insurance_App.Repositories
 
             return list;
         }
+
+        public bool CreatePolicy(PolicyType policy)
+        {
+            string query = @"
+                INSERT INTO PolicyTypes
+                (PolicyName, PolicyCategory, BasePremium,
+                 InterestRate, MinAge, MaxAge, TermYears, IsActive)
+                VALUES
+                (@Name, @Category, @Premium,
+                 @Rate, @MinAge, @MaxAge, @Term, 1)";
+
+            SqlParameter[] p =
+            {
+                new("@Name", policy.PolicyName),
+                new("@Category", policy.PolicyCategory),
+                new("@Premium", policy.BasePremium),
+                new("@Rate", policy.InterestRate),
+                new("@MinAge", policy.MinAge),
+                new("@MaxAge", policy.MaxAge),
+                new("@Term", policy.TermYears)
+            };
+
+            return _db.ExecuteNonQuery(query, p) > 0;
+        }
+
     }
 }
