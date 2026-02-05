@@ -134,6 +134,36 @@ namespace E_Insurance_App.Repositories
             return _db.ExecuteNonQuery(query, prm) > 0;
         }
 
+        public List<PolicyType> GetActivePolicies()
+        {
+            string query = @"
+        SELECT *
+        FROM PolicyTypes
+        WHERE IsActive = 1
+        ORDER BY PolicyTypeId";
+
+            var dt = _db.ExecuteQuery(query);
+
+            List<PolicyType> list = new();
+
+            foreach (DataRow r in dt.Rows)
+            {
+                list.Add(new PolicyType
+                {
+                    PolicyTypeId = (int)r["PolicyTypeId"],
+                    PolicyName = r["PolicyName"].ToString(),
+                    PolicyCategory = r["PolicyCategory"].ToString(),
+                    BasePremium = (decimal)r["BasePremium"],
+                    InterestRate = (decimal)r["InterestRate"],
+                    MinAge = (int)r["MinAge"],
+                    MaxAge = (int)r["MaxAge"],
+                    TermYears = (int)r["TermYears"],
+                    IsActive = (bool)r["IsActive"]
+                });
+            }
+
+            return list;
+        }
 
     }
 }

@@ -152,5 +152,13 @@ namespace E_Insurance_App.Controllers
             return RedirectToAction("ManagePolicies");
         }
 
+        [AuthorizeRole("Customer")]
+        public IActionResult Available()
+        {
+            var policies = _policyRepository.GetActivePolicies();
+
+            return View(policies);
+        }
+
     }
 }
