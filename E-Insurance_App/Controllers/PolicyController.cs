@@ -89,5 +89,68 @@ namespace E_Insurance_App.Controllers
         {
             return View();
         }
+
+        [AuthorizeRole("Admin")]
+        public IActionResult Edit(int id)
+        {
+            var policy = _policyRepository.GetPolicyById(id);
+
+            if (policy == null) return NotFound();
+
+            var model = new EditPolicyViewModel
+            {
+                PolicyTypeId = policy.PolicyTypeId,
+                PolicyName = policy.PolicyName,
+                PolicyCategory = policy.PolicyCategory,
+                BasePremium = policy.BasePremium,
+                InterestRate = policy.InterestRate,
+                MinAge = policy.MinAge,
+                MaxAge = policy.MaxAge,
+                TermYears = policy.TermYears,
+                IsActive = policy.IsActive
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AuthorizeRole("Admin")]
+        public IActionResult Edit(EditPolicyViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var policy = new PolicyType
+            {
+                PolicyTypeId = model.PolicyTypeId,
+                PolicyName = model.PolicyName,
+                PolicyCategory = model.PolicyCategory,
+                BasePremium = model.BasePremium,
+                InterestRate = model.InterestRate,
+                MinAge = model.MinAge,
+                MaxAge = model.MaxAge,
+                TermYears = model.TermYears,
+                IsActive = model.IsActive
+            };
+
+            _policyRepository.UpdatePolicy(policy);
+
+            return RedirectToAction("ManagePolicies");
+        }
+
+        [HttpPost]
+        [AuthorizeRole("Admin")]
+        public IActionResult ToggleStatus(int id)
+        {
+            var p = _policyRepository.GetPolicyById(id);
+
+            p.IsActive = !p.IsActive;
+
+            _policyRepository.UpdatePolicy(p);
+
+            return RedirectToAction("ManagePolicies");
+        }
+
     }
 }

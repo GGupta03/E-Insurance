@@ -14,6 +14,31 @@ namespace E_Insurance_App.Repositories
             return (int)_db.ExecuteScalar(
                 "SELECT COUNT(*) FROM PolicyTypes");
         }
+        public PolicyType GetPolicyById(int id)
+        {
+            string query = "SELECT * FROM PolicyTypes WHERE PolicyTypeId=@Id";
+
+            SqlParameter[] p = { new("@Id", id) };
+
+            var dt = _db.ExecuteQuery(query, p);
+
+            if (dt.Rows.Count == 0) return null;
+
+            var r = dt.Rows[0];
+
+            return new PolicyType
+            {
+                PolicyTypeId = (int)r["PolicyTypeId"],
+                PolicyName = r["PolicyName"].ToString(),
+                PolicyCategory = r["PolicyCategory"].ToString(),
+                BasePremium = (decimal)r["BasePremium"],
+                InterestRate = (decimal)r["InterestRate"],
+                MinAge = (int)r["MinAge"],
+                MaxAge = (int)r["MaxAge"],
+                TermYears = (int)r["TermYears"],
+                IsActive = (bool)r["IsActive"]
+            };
+        }
 
         public List<PolicyType> GetPoliciesPaged(int page, int size)
         {
@@ -78,6 +103,37 @@ namespace E_Insurance_App.Repositories
 
             return _db.ExecuteNonQuery(query, p) > 0;
         }
+
+        public bool UpdatePolicy(PolicyType p)
+        {
+            string query = @"
+                UPDATE PolicyTypes SET
+                PolicyName=@Name,
+                PolicyCategory=@Cat,
+                BasePremium=@Premium,
+                InterestRate=@Rate,
+                MinAge=@Min,
+                MaxAge=@Max,
+                TermYears=@Term,
+                IsActive=@Active
+                WHERE PolicyTypeId=@Id";
+
+            SqlParameter[] prm =
+            {
+                new("@Name", p.PolicyName),
+                new("@Cat", p.PolicyCategory),
+                new("@Premium", p.BasePremium),
+                new("@Rate", p.InterestRate),
+                new("@Min", p.MinAge),
+                new("@Max", p.MaxAge),
+                new("@Term", p.TermYears),
+                new("@Active", p.IsActive),
+                new("@Id", p.PolicyTypeId)
+            };
+
+            return _db.ExecuteNonQuery(query, prm) > 0;
+        }
+
 
     }
 }

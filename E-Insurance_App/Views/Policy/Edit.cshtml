@@ -1,0 +1,28 @@
+﻿@model E_Insurance_App.Models.ViewModels.EditPolicyViewModel
+
+<h2>Edit Policy</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="PolicyTypeId" />
+
+    @foreach (var field in new[]{
+        "PolicyName","PolicyCategory","BasePremium",
+        "InterestRate","MinAge","MaxAge","TermYears"})
+    {
+        <div class="mb-2">
+            <label>@field</label>
+            <input name="@field"
+                   value="@Model.GetType().GetProperty(field).GetValue(Model)"
+                   class="form-control" />
+        </div>
+    }
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label>Active</label>
+    </div>
+
+    <button class="btn btn-success">Save</button>
+    <a asp-action="ManagePolicies"
+       class="btn btn-secondary">Cancel</a>
+</form>

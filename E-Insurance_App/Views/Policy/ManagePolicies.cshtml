@@ -16,6 +16,7 @@
         <th>Age</th>
         <th>Term</th>
         <th>Status</th>
+        <th>Actions</th>
     </tr>
 
     @foreach (var p in Model.Items)
@@ -28,6 +29,21 @@
             <td>@p.MinAge - @p.MaxAge</td>
             <td>@p.TermYears yrs</td>
             <td>@(p.IsActive ? "Active" : "Inactive")</td>
+            <td>
+                <a asp-action="Edit"
+                   asp-route-id="@p.PolicyTypeId"
+                   class="btn btn-warning btn-sm">Edit</a>
+
+                <form asp-action="ToggleStatus"
+                      asp-route-id="@p.PolicyTypeId"
+                      method="post"
+                      style="display:inline;">
+                    <button class="btn btn-sm @(p.IsActive ? "btn-danger" : "btn-success")">
+                        @(p.IsActive ? "Deactivate" : "Activate")
+                    </button>
+                </form>
+            </td>
+
         </tr>
     }
 </table>
