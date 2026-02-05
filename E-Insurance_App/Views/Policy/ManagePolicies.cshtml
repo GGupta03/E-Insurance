@@ -1,0 +1,40 @@
+﻿@model E_Insurance_App.Helpers.PaginationHelper<E_Insurance_App.Models.Entities.PolicyType>
+
+<h2>Policy Catalog</h2>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Premium</th>
+        <th>Rate</th>
+        <th>Age</th>
+        <th>Term</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var p in Model.Items)
+    {
+        <tr>
+            <td>@p.PolicyName</td>
+            <td>@p.PolicyCategory</td>
+            <td>@p.BasePremium</td>
+            <td>@p.InterestRate %</td>
+            <td>@p.MinAge - @p.MaxAge</td>
+            <td>@p.TermYears yrs</td>
+            <td>@(p.IsActive ? "Active" : "Inactive")</td>
+        </tr>
+    }
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a asp-action="ManagePolicies"
+                   asp-route-page="@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

@@ -8,6 +8,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<DbHelper>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<BankRepository>();
+builder.Services.AddScoped<PolicyRepository>();
 
 builder.Services.AddSession(options =>
 {
