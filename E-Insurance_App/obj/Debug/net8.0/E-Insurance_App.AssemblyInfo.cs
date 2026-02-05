@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("E-Insurance_App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42e5e9f5523fd15a9739cc38e9d0e1da099760f8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+adb7784bb58c2074d711f0fd58a75cde6dd9f9d2")]
 [assembly: System.Reflection.AssemblyProductAttribute("E-Insurance_App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("E-Insurance_App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

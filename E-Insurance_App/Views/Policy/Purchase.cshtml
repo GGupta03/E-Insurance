@@ -1,6 +1,32 @@
-﻿namespace E_Insurance_App.Views.Policy
-{
-    public class Purchase
-    {
-    }
-}
+﻿@model E_Insurance_App.Models.Entities.PolicyType
+
+<h2>Purchase Policy</h2>
+
+<div class="card p-3">
+
+    <h4>@Model.PolicyName</h4>
+
+    <p><strong>Category:</strong> @Model.PolicyCategory</p>
+    <p><strong>Premium:</strong> @Model.BasePremium</p>
+    <p><strong>Interest:</strong> @Model.InterestRate %</p>
+    <p><strong>Age Range:</strong> @Model.MinAge - @Model.MaxAge</p>
+    <p><strong>Term:</strong> @Model.TermYears years</p>
+
+    <form asp-action="PurchaseConfirm"
+          asp-route-id="@Model.PolicyTypeId"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <button class="btn btn-success">
+            Confirm Purchase
+        </button>
+
+        <a asp-action="Available"
+           class="btn btn-secondary">
+            Cancel
+        </a>
+
+    </form>
+
+</div>

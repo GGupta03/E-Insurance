@@ -137,10 +137,10 @@ namespace E_Insurance_App.Repositories
         public List<PolicyType> GetActivePolicies()
         {
             string query = @"
-        SELECT *
-        FROM PolicyTypes
-        WHERE IsActive = 1
-        ORDER BY PolicyTypeId";
+                SELECT *
+                FROM PolicyTypes
+                WHERE IsActive = 1
+                ORDER BY PolicyTypeId";
 
             var dt = _db.ExecuteQuery(query);
 
@@ -163,6 +163,30 @@ namespace E_Insurance_App.Repositories
             }
 
             return list;
+        }
+        public bool PurchasePolicy(int userId, PolicyType policy)
+        {
+            DateTime start = DateTime.Now;
+            DateTime end = start.AddYears(policy.TermYears);
+
+            string query = @"
+                INSERT INTO CustomerPolicies
+                (UserId, PolicyTypeId, StartDate,
+                 EndDate, PremiumAmount, PolicyStatus)
+                VALUES
+                (@UserId, @PolicyId, @Start,
+                 @End, @Premium, 'Active')";
+
+            SqlParameter[] p =
+            {
+                new("@UserId", userId),
+                new("@PolicyId", policy.PolicyTypeId),
+                new("@Start", start),
+                new("@End", end),
+                new("@Premium", policy.BasePremium)
+            };
+
+            return _db.ExecuteNonQuery(query, p) > 0;
         }
 
     }

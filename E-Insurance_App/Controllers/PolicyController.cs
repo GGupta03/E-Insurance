@@ -159,6 +159,31 @@ namespace E_Insurance_App.Controllers
 
             return View(policies);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AuthorizeRole("Customer")]
+        public IActionResult PurchaseConfirm(int id)
+        {
+            int userId =
+                HttpContext.Session.GetInt32("UserId").Value;
+
+            var policy =
+                _policyRepository.GetPolicyById(id);
+
+            if (policy == null)
+                return NotFound();
+
+            bool success =
+                _policyRepository.PurchasePolicy(userId, policy);
+
+            if (!success)
+                return BadRequest();
+
+            TempData["Success"] =
+                "Policy purchased successfully!";
+
+            return RedirectToAction("Available");
+        }
 
     }
 }
