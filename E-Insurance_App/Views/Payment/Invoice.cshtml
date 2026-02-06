@@ -1,6 +1,107 @@
-﻿namespace E_Insurance_App.Views.Payment
-{
-    public class Invoice
-    {
-    }
+﻿@model E_Insurance_App.Models.Entities.Invoice
+
+@{
+    ViewData["Title"] = "Invoice";
 }
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card" id="invoiceCard">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">INVOICE</h4>
+                <span class="badge bg-success fs-6">PAID</span>
+            </div>
+            <div class="card-body">
+                <!-- Header -->
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <h5 class="text-primary">E-Insurance</h5>
+                        <p class="text-muted mb-0">Your Trusted Insurance Partner</p>
+                    </div>
+                    <div class="col-6 text-end">
+                        <p class="mb-1"><strong>Invoice #:</strong> @Model.InvoiceNumber</p>
+                        <p class="mb-1"><strong>Date:</strong> @(Model.InvoiceDate?.ToString("dd MMM yyyy") ?? "N/A")</p>
+                    </div>
+                </div>
+
+                <hr />
+
+                <!-- Customer Details -->
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <h6 class="text-muted">BILL TO:</h6>
+                        <p class="mb-1"><strong>@Model.CustomerName</strong></p>
+                        <p class="mb-0">@Model.CustomerEmail</p>
+                    </div>
+                    <div class="col-6 text-end">
+                        <h6 class="text-muted">PAYMENT DETAILS:</h6>
+                        <p class="mb-1"><strong>Method:</strong> @Model.PaymentMode</p>
+                        <p class="mb-0"><strong>Transaction ID:</strong> <code>@Model.TransactionRef</code></p>
+                    </div>
+                </div>
+
+                <!-- Items Table -->
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-end">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.PolicyName - Premium Payment</td>
+                            <td class="text-end">&#8377;@Model.Amount.ToString("N2")</td>
+                        </tr>
+                        <tr>
+                            <td>GST (18%)</td>
+                            <td class="text-end">&#8377;@Model.Tax.ToString("N2")</td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="table-dark">
+                        <tr>
+                            <th>Total Amount</th>
+                            <th class="text-end fs-5">&#8377;@Model.TotalAmount.ToString("N2")</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- Footer -->
+                <div class="text-center text-muted mt-4">
+                    <p class="mb-1">Thank you for choosing E-Insurance!</p>
+                    <small>This is a computer-generated invoice and does not require a signature.</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between mt-3">
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                &#8592; Back to Payment History
+            </a>
+            <button onclick="window.print()" class="btn btn-primary">
+                Print Invoice
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        body * {
+            visibility: hidden;
+        }
+        #invoiceCard, #invoiceCard * {
+            visibility: visible;
+        }
+        #invoiceCard {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+        .btn {
+            display: none !important;
+        }
+    }
+</style>

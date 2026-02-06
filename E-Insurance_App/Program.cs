@@ -10,7 +10,9 @@ builder.Services.AddSingleton<DbHelper>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<BankRepository>();
 builder.Services.AddScoped<PolicyRepository>();
+builder.Services.AddScoped<PaymentRepository>();
 builder.Services.AddScoped<PremiumService>();
+builder.Services.AddScoped<PaymentService>();
 
 
 builder.Services.AddSession(options =>

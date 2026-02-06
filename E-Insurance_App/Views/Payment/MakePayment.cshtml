@@ -1,0 +1,78 @@
+@model E_Insurance_App.Models.ViewModels.MakePaymentViewModel
+
+@{
+    ViewData["Title"] = "Make Payment";
+}
+
+<h2>Make Payment</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <strong>Payment Details</strong>
+            </div>
+            <div class="card-body">
+                <form asp-action="MakePayment" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="CustomerPolicyId" />
+                    <input type="hidden" asp-for="Amount" />
+                    <input type="hidden" asp-for="PolicyName" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Policy</label>
+                        <p class="form-control-plaintext">@Model.PolicyName</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Amount to Pay</label>
+                        <p class="form-control-plaintext fs-4 text-success">&#8377;@Model.Amount.ToString("N2")</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="PaymentMethod" class="form-label fw-bold">Payment Method</label>
+                        <select asp-for="PaymentMethod" class="form-select">
+                            <option value="">-- Select Payment Method --</option>
+                            <option value="Card">Credit/Debit Card</option>
+                            <option value="UPI">UPI</option>
+                            <option value="NetBanking">Net Banking</option>
+                            <option value="Cash">Cash</option>
+                        </select>
+                        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            Pay &#8377;@Model.Amount.ToString("N2")
+                        </button>
+                        <a asp-controller="Policy" asp-action="MyPolicies" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <strong>Payment Information</strong>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">&#10003; Secure payment processing</li>
+                    <li class="mb-2">&#10003; Instant confirmation</li>
+                    <li class="mb-2">&#10003; Invoice generated automatically</li>
+                    <li class="mb-2">&#10003; 18% GST will be added</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
