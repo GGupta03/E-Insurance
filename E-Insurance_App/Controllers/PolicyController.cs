@@ -211,5 +211,18 @@ namespace E_Insurance_App.Controllers
 
             return View(policies);
         }
+
+        // CUSTOMER — Purchase screen
+        [AuthorizeRole("Customer")]
+        public IActionResult Purchase(int id)
+        {
+            var policy = _policyRepository.GetPolicyById(id);
+
+            if (policy == null)
+                return NotFound();
+
+            return View(policy);
+        }
+
     }
 }

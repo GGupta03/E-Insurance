@@ -1,22 +1,24 @@
 ﻿@model E_Insurance_App.Models.Entities.PolicyType
 
-<h2>Purchase Policy</h2>
+@{
+    ViewData["Title"] = "Purchase Policy";
+}
 
-<div class="card p-3">
+<h2>Confirm Policy Purchase</h2>
+
+<div class="card p-3 shadow-sm">
 
     <h4>@Model.PolicyName</h4>
 
-    <p><strong>Category:</strong> @Model.PolicyCategory</p>
-    <p><strong>Premium:</strong> @Model.BasePremium</p>
-    <p><strong>Interest:</strong> @Model.InterestRate %</p>
-    <p><strong>Age Range:</strong> @Model.MinAge - @Model.MaxAge</p>
-    <p><strong>Term:</strong> @Model.TermYears years</p>
+    <p>
+        <strong>Category:</strong> @Model.PolicyCategory <br />
+        <strong>Premium:</strong> ₹@Model.BasePremium <br />
+        <strong>Term:</strong> @Model.TermYears years
+    </p>
 
-    <form asp-action="PurchaseConfirm"
-          asp-route-id="@Model.PolicyTypeId"
-          method="post">
+    <form asp-action="PurchaseConfirm" method="post">
 
-        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.PolicyTypeId" />
 
         <button class="btn btn-success">
             Confirm Purchase
