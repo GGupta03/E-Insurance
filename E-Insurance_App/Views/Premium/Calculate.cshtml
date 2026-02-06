@@ -1,0 +1,59 @@
+﻿@model E_Insurance_App.Models.ViewModels.PremiumViewModel
+
+<h2>Premium Calculator</h2>
+
+<form method="post">
+
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All"
+         class="text-danger"></div>
+
+    <div class="mb-3">
+        <label>Select Policy</label>
+
+        <select asp-for="PolicyTypeId"
+                class="form-control">
+
+            <option value="">-- Select Policy --</option>
+
+            @foreach (var p in Model.Policies)
+            {
+                <option value="@p.PolicyTypeId">
+                    @p.PolicyName
+                </option>
+            }
+
+        </select>
+
+        <span asp-validation-for="PolicyTypeId"
+              class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Your Age</label>
+
+        <input asp-for="Age"
+               class="form-control" />
+
+        <span asp-validation-for="Age"
+              class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary">
+        Calculate Premium
+    </button>
+
+</form>
+
+@if (Model.Result > 0)
+{
+    <div class="alert alert-success mt-3">
+        Estimated Premium:
+        <strong>₹@Model.Result</strong>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

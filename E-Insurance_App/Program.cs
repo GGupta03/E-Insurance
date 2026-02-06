@@ -1,5 +1,6 @@
 using E_Insurance_App.Helpers;
 using E_Insurance_App.Repositories;
+using E_Insurance_App.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddSingleton<DbHelper>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<BankRepository>();
 builder.Services.AddScoped<PolicyRepository>();
+builder.Services.AddScoped<PremiumService>();
+
 
 builder.Services.AddSession(options =>
 {
