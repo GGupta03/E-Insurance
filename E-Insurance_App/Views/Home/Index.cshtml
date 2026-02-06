@@ -8,39 +8,56 @@
 </div>
 
 <div class="row mt-4">
+
+    <!-- View Policies -->
     <div class="col-md-4">
-        <div class="card">
+        <div class="card shadow-sm">
             <div class="card-body">
                 <h5 class="card-title">View Policies</h5>
-                <p class="card-text">Browse available insurance policies and find the right coverage for you.</p>
-                <a asp-controller="Policy" asp-action="Available" class="btn btn-primary">
+                <p class="card-text">
+                    Browse available insurance policies and find the right coverage for you.
+                </p>
+                <a asp-controller="Policy"
+                   asp-action="Available"
+                   class="btn btn-primary">
                     View Policies
                 </a>
             </div>
         </div>
     </div>
 
+    <!-- Premium Calculator -->
     <div class="col-md-4">
-        <div class="card">
+        <div class="card shadow-sm">
             <div class="card-body">
                 <h5 class="card-title">Calculate Premium</h5>
-                <p class="card-text">Calculate your premium based on your age and policy preferences.</p>
-                <a asp-controller="Premium" asp-action="Calculate" class="btn btn-primary">
+                <p class="card-text">
+                    Estimate your premium based on policy and eligibility.
+                </p>
+                <a asp-controller="Premium"
+                   asp-action="Calculate"
+                   class="btn btn-primary">
                     Calculate
                 </a>
             </div>
         </div>
     </div>
 
+    <!-- My Policies Dashboard -->
     <div class="col-md-4">
-        <div class="card">
+        <div class="card shadow-sm">
             <div class="card-body">
-                <h5 class="card-title">My Account</h5>
-                <p class="card-text">Manage your policies, payments, and account settings.</p>
-                <a asp-controller="Home" asp-action="Profile" class="btn btn-primary">
-                    My Profile
+                <h5 class="card-title">My Policies</h5>
+                <p class="card-text">
+                    View and manage your purchased insurance policies.
+                </p>
+                <a asp-controller="Policy"
+                   asp-action="MyPolicies"
+                   class="btn btn-primary">
+                    My Policies
                 </a>
             </div>
         </div>
     </div>
+
 </div>

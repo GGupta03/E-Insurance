@@ -16,6 +16,9 @@ namespace E_Insurance_App.Controllers
             _policyRepository = policyRepository;
         }
 
+        // ===============================
+        // ADMIN — Manage Policies
+        // ===============================
         [AuthorizeRole("Admin")]
         public IActionResult ManagePolicies(int page = 1)
         {
@@ -38,6 +41,9 @@ namespace E_Insurance_App.Controllers
             return View(model);
         }
 
+        // ===============================
+        // ADMIN — Create Policy
+        // ===============================
         [AuthorizeRole("Admin")]
         public IActionResult Create()
         {
@@ -64,7 +70,8 @@ namespace E_Insurance_App.Controllers
                 IsActive = true
             };
 
-            bool created = _policyRepository.CreatePolicy(policy);
+            bool created =
+                _policyRepository.CreatePolicy(policy);
 
             if (!created)
             {
@@ -75,27 +82,17 @@ namespace E_Insurance_App.Controllers
             return RedirectToAction("ManagePolicies");
         }
 
-
-        // Any logged-in user
-        [AuthorizeRole]
-        public IActionResult MyPolicies()
-        {
-            return View();
-        }
-
-        // Only Customer
-        [AuthorizeRole("Customer")]
-        public IActionResult Purchase()
-        {
-            return View();
-        }
-
+        // ===============================
+        // ADMIN — Edit Policy
+        // ===============================
         [AuthorizeRole("Admin")]
         public IActionResult Edit(int id)
         {
-            var policy = _policyRepository.GetPolicyById(id);
+            var policy =
+                _policyRepository.GetPolicyById(id);
 
-            if (policy == null) return NotFound();
+            if (policy == null)
+                return NotFound();
 
             var model = new EditPolicyViewModel
             {
@@ -139,26 +136,41 @@ namespace E_Insurance_App.Controllers
             return RedirectToAction("ManagePolicies");
         }
 
+        // ===============================
+        // ADMIN — Activate/Deactivate
+        // ===============================
         [HttpPost]
         [AuthorizeRole("Admin")]
         public IActionResult ToggleStatus(int id)
         {
-            var p = _policyRepository.GetPolicyById(id);
+            var policy =
+                _policyRepository.GetPolicyById(id);
 
-            p.IsActive = !p.IsActive;
+            if (policy == null)
+                return NotFound();
 
-            _policyRepository.UpdatePolicy(p);
+            policy.IsActive = !policy.IsActive;
+
+            _policyRepository.UpdatePolicy(policy);
 
             return RedirectToAction("ManagePolicies");
         }
 
+        // ===============================
+        // CUSTOMER — View Available Policies
+        // ===============================
         [AuthorizeRole("Customer")]
         public IActionResult Available()
         {
-            var policies = _policyRepository.GetActivePolicies();
+            var policies =
+                _policyRepository.GetActivePolicies();
 
             return View(policies);
         }
+
+        // ===============================
+        // CUSTOMER — Purchase Policy
+        // ===============================
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AuthorizeRole("Customer")]
@@ -185,5 +197,19 @@ namespace E_Insurance_App.Controllers
             return RedirectToAction("Available");
         }
 
+        // ===============================
+        // CUSTOMER — My Policies Dashboard
+        // ===============================
+        [AuthorizeRole("Customer")]
+        public IActionResult MyPolicies()
+        {
+            int userId =
+                HttpContext.Session.GetInt32("UserId").Value;
+
+            var policies =
+                _policyRepository.GetCustomerPolicies(userId);
+
+            return View(policies);
+        }
     }
 }

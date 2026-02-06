@@ -1,6 +1,26 @@
-﻿namespace E_Insurance_App.Views.Policy
-{
-    public class MyPolicies
+﻿@model System.Data.DataTable
+
+<h2>My Policies</h2>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Policy</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Premium</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (System.Data.DataRow row in Model.Rows)
     {
+        <tr>
+            <td>@row["PolicyName"]</td>
+            <td>@Convert.ToDateTime(row["StartDate"]).ToShortDateString()</td>
+            <td>@Convert.ToDateTime(row["EndDate"]).ToShortDateString()</td>
+            <td>@row["PremiumAmount"]</td>
+            <td>@row["PolicyStatus"]</td>
+        </tr>
     }
-}
+
+</table>

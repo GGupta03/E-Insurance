@@ -189,5 +189,29 @@ namespace E_Insurance_App.Repositories
             return _db.ExecuteNonQuery(query, p) > 0;
         }
 
+        public DataTable GetCustomerPolicies(int userId)
+        {
+            string query = @"
+                SELECT cp.CustomerPolicyId,
+                       p.PolicyName,
+                       cp.StartDate,
+                       cp.EndDate,
+                       cp.PremiumAmount,
+                       cp.PolicyStatus
+                FROM CustomerPolicies cp
+                JOIN PolicyTypes p
+                    ON cp.PolicyTypeId = p.PolicyTypeId
+                WHERE cp.UserId = @UserId
+                ORDER BY cp.StartDate DESC";
+
+            SqlParameter[] pms =
+            {
+                new("@UserId", userId)
+            };
+
+            return _db.ExecuteQuery(query, pms);
+        }
+
+
     }
 }
