@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace E_Insurance_App.Controllers
 {
-    [AuthorizeRole]
     public class PremiumController : Controller
     {
         private readonly PolicyRepository _policyRepo;
@@ -20,6 +19,8 @@ namespace E_Insurance_App.Controllers
             _premiumService = premiumService;
         }
 
+        [AuthorizeRole]
+        [HttpGet]
         public IActionResult Calculate()
         {
             var model = new PremiumViewModel
@@ -32,24 +33,40 @@ namespace E_Insurance_App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeRole]
         public IActionResult Calculate(PremiumViewModel model)
         {
-            model.Policies =
-                _policyRepo.GetActivePolicies();
+            // Always reload policies for the dropdown
+            model.Policies = _policyRepo.GetActivePolicies();
+
+            // Clear validation errors for non-input properties
+            ModelState.Remove("Policies");
+            ModelState.Remove("SelectedPolicyName");
+            ModelState.Remove("Result");
 
             if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
 
-            var policy =
-                _policyRepo.GetPolicyById(model.PolicyTypeId);
+            var policy = _policyRepo.GetPolicyById(model.PolicyTypeId);
 
             if (policy == null)
+            {
+                ModelState.AddModelError("PolicyTypeId", "Selected policy not found");
                 return View(model);
+            }
 
-            model.Result =
-                _premiumService.CalculatePremium(
-                    policy,
-                    model.Age);
+            // Validate age against policy requirements
+            if (model.Age < policy.MinAge || model.Age > policy.MaxAge)
+            {
+                ModelState.AddModelError("Age", 
+                    $"Age must be between {policy.MinAge} and {policy.MaxAge} for this policy");
+                return View(model);
+            }
+
+            model.Result = _premiumService.CalculatePremium(policy, model.Age);
+            model.SelectedPolicyName = policy.PolicyName;
 
             return View(model);
         }
