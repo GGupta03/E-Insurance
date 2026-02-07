@@ -11,9 +11,10 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<BankRepository>();
 builder.Services.AddScoped<PolicyRepository>();
 builder.Services.AddScoped<PaymentRepository>();
+builder.Services.AddScoped<CommissionRepository>();
 builder.Services.AddScoped<PremiumService>();
 builder.Services.AddScoped<PaymentService>();
-
+builder.Services.AddScoped<CommissionService>();
 
 builder.Services.AddSession(options =>
 {

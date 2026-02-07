@@ -4,23 +4,54 @@
 
 <h2>Admin Dashboard</h2>
 
-<ul>
-    <li>
-        <a asp-controller="User" asp-action="Index">
-            Manage Users
-        </a>
-    </li>
-
-    <li>
-        <a asp-controller="Bank" asp-action="Index">
-            Manage Banks
-        </a>
-    </li>
-
-    <li>
-        <a asp-controller="Policy"
-           asp-action="ManagePolicies">
-            Manage Policies
-        </a>
-    </li>
-</ul>
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Manage Users</h5>
+                <p class="card-text">Create, edit, and manage user accounts.</p>
+                <a asp-controller="User" asp-action="Index" class="btn btn-primary">Go to Users</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Manage Banks</h5>
+                <p class="card-text">Add and manage bank information.</p>
+                <a asp-controller="Bank" asp-action="Index" class="btn btn-primary">Go to Banks</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Manage Policies</h5>
+                <p class="card-text">Create and manage insurance policies.</p>
+                <a asp-controller="Policy" asp-action="ManagePolicies" class="btn btn-primary">Go to Policies</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Commission Management</h5>
+                <p class="card-text">Calculate and assign agent commissions.</p>
+                <a asp-controller="Commission" asp-action="Index" class="btn btn-primary">Go to Commissions</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Payment Reports</h5>
+                <p class="card-text">View all payment transactions.</p>
+                <a asp-controller="Payment" asp-action="Index" class="btn btn-primary">Go to Payments</a>
+            </div>
+        </div>
+    </div>
+</div>

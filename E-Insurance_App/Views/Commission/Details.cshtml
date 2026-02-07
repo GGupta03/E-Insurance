@@ -1,0 +1,122 @@
+@model E_Insurance_App.Models.ViewModels.AgentCommissionSummary
+
+@{
+    ViewData["Title"] = "Agent Commission Details";
+}
+
+<h2>Agent Commission Details</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        &#8592; Back to Commission List
+    </a>
+    <a asp-action="Calculate" class="btn btn-primary">
+        + Assign New Commission
+    </a>
+</div>
+
+<!-- Agent Summary Card -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <strong>Agent Information</strong>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Name:</strong> @Model.AgentName</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+            </div>
+            <div class="col-md-6">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h3>@Model.TotalPoliciesSold</h3>
+                                <p class="mb-0">Policies Sold</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h3>&#8377;@Model.TotalCommissionEarned.ToString("N2")</h3>
+                                <p class="mb-0">Total Earned</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Commission History -->
+<div class="card">
+    <div class="card-header bg-secondary text-white">
+        <strong>Commission History</strong>
+    </div>
+    <div class="card-body">
+        @if (Model.CommissionDetails.Count == 0)
+        {
+            <div class="alert alert-info mb-0">
+                No commission records found for this agent.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Date</th>
+                            <th>Policy</th>
+                            <th>Customer</th>
+                            <th>Policy Premium</th>
+                            <th>Commission Rate</th>
+                            <th>Commission Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var comm in Model.CommissionDetails)
+                        {
+                            <tr>
+                                <td>@comm.CreatedAt.ToString("dd MMM yyyy")</td>
+                                <td>@comm.PolicyName</td>
+                                <td>@comm.CustomerName</td>
+                                <td>&#8377;@(comm.PolicyPremium?.ToString("N2") ?? "0.00")</td>
+                                <td>@(comm.CommissionRate?.ToString("N2") ?? "0")%</td>
+                                <td class="text-success fw-bold">
+                                    &#8377;@(comm.CommissionAmount?.ToString("N2") ?? "0.00")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="table-light">
+                        <tr>
+                            <th colspan="5" class="text-end">Total Commission:</th>
+                            <th class="text-success">
+                                &#8377;@Model.TotalCommissionEarned.ToString("N2")
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+    </div>
+</div>
