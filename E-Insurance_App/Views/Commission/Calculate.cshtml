@@ -20,103 +20,108 @@
     </a>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <strong>Commission Calculator</strong>
-            </div>
-            <div class="card-body">
-                <form asp-action="Calculate" method="post">
-                    @Html.AntiForgeryToken()
-
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-                    <div class="mb-3">
-                        <label asp-for="AgentId" class="form-label">Select Agent</label>
-                        <select asp-for="AgentId" class="form-select" id="agentSelect">
-                            <option value="0">-- Select Agent --</option>
-                            @foreach (var agent in Model.Agents)
-                            {
-                                <option value="@agent.AgentId">
-                                    @agent.AgentName (@agent.Email)
-                                </option>
-                            }
-                        </select>
-                        <span asp-validation-for="AgentId" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="CustomerPolicyId" class="form-label">Select Policy</label>
-                        <select asp-for="CustomerPolicyId" class="form-select" id="policySelect">
-                            <option value="0">-- Select Policy --</option>
-                            @foreach (var policy in Model.Policies)
-                            {
-                                <option value="@policy.CustomerPolicyId" data-premium="@policy.PremiumAmount">
-                                    @policy.PolicyName - @policy.CustomerName (&#8377;@policy.PremiumAmount.ToString("N2"))
-                                </option>
-                            }
-                        </select>
-                        <span asp-validation-for="CustomerPolicyId" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="CommissionRate" class="form-label">Commission Rate (%)</label>
-                        <input asp-for="CommissionRate" class="form-control" type="number" 
-                               step="0.01" min="0.01" max="100" id="rateInput" />
-                        <span asp-validation-for="CommissionRate" class="text-danger"></span>
-                        <small class="text-muted">Enter commission percentage (e.g., 5 for 5%)</small>
-                    </div>
-
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-success btn-lg">
-                            Assign Commission
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+@if (Model.Agents.Count == 0)
+{
+    <div class="alert alert-warning">
+        <h5>No Agents Found!</h5>
+        <p>There are no users with the "Agent" role in the system. You need to create an agent first before assigning commissions.</p>
+        <a asp-controller="User" asp-action="Create" class="btn btn-primary">
+            + Create New Agent
+        </a>
     </div>
+}
+else if (Model.Policies.Count == 0)
+{
+    <div class="alert alert-warning">
+        <h5>No Policies Found!</h5>
+        <p>No active customer policies available for commission assignment. Customers need to purchase policies first.</p>
+        <a asp-action="Index" class="btn btn-secondary">Back to Commission List</a>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <strong>Commission Calculator</strong>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Calculate" method="post">
+                        @Html.AntiForgeryToken()
 
-    <div class="col-md-6">
-        <div class="card border-info">
-            <div class="card-header bg-info text-white">
-                <strong>Commission Preview</strong>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label class="form-label text-muted">Policy Premium</label>
-                    <h4 id="premiumDisplay">&#8377;0.00</h4>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label text-muted">Commission Rate</label>
-                    <h4 id="rateDisplay">0%</h4>
-                </div>
-                <hr />
-                <div>
-                    <label class="form-label text-muted">Calculated Commission</label>
-                    <h2 class="text-success" id="commissionDisplay">&#8377;0.00</h2>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="AgentId" class="form-label">Select Agent</label>
+                            <select asp-for="AgentId" class="form-select" id="agentSelect">
+                                <option value="0">-- Select Agent --</option>
+                                @foreach (var agent in Model.Agents)
+                                {
+                                    <option value="@agent.AgentId">
+                                        @agent.AgentName (@agent.Email)
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="AgentId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CustomerPolicyId" class="form-label">Select Policy</label>
+                            <select asp-for="CustomerPolicyId" class="form-select" id="policySelect">
+                                <option value="0">-- Select Policy --</option>
+                                @foreach (var policy in Model.Policies)
+                                {
+                                    <option value="@policy.CustomerPolicyId" data-premium="@policy.PremiumAmount">
+                                        @policy.PolicyName - @policy.CustomerName (&#8377;@policy.PremiumAmount.ToString("N2"))
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="CustomerPolicyId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CommissionRate" class="form-label">Commission Rate (%)</label>
+                            <input asp-for="CommissionRate" class="form-control" type="number" 
+                                   step="0.01" min="0.01" max="100" id="rateInput" />
+                            <span asp-validation-for="CommissionRate" class="text-danger"></span>
+                            <small class="text-muted">Enter commission percentage (e.g., 5 for 5%)</small>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                Assign Commission
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
-        @if (Model.Agents.Count == 0)
-        {
-            <div class="alert alert-warning mt-3">
-                <strong>No Agents Found!</strong>
-                <p class="mb-0">Please add agents (users with 'Agent' role) before assigning commissions.</p>
+        <div class="col-md-6">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <strong>Commission Preview</strong>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Policy Premium</label>
+                        <h4 id="premiumDisplay">&#8377;0.00</h4>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Commission Rate</label>
+                        <h4 id="rateDisplay">0%</h4>
+                    </div>
+                    <hr />
+                    <div>
+                        <label class="form-label text-muted">Calculated Commission</label>
+                        <h2 class="text-success" id="commissionDisplay">&#8377;0.00</h2>
+                    </div>
+                </div>
             </div>
-        }
-
-        @if (Model.Policies.Count == 0)
-        {
-            <div class="alert alert-warning mt-3">
-                <strong>No Policies Found!</strong>
-                <p class="mb-0">No active customer policies available for commission assignment.</p>
-            </div>
-        }
+        </div>
     </div>
-</div>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -129,22 +134,24 @@
             const rateDisplay = document.getElementById('rateDisplay');
             const commissionDisplay = document.getElementById('commissionDisplay');
 
-            function updatePreview() {
-                const selectedOption = policySelect.options[policySelect.selectedIndex];
-                const premium = parseFloat(selectedOption.getAttribute('data-premium')) || 0;
-                const rate = parseFloat(rateInput.value) || 0;
-                const commission = (premium * rate / 100).toFixed(2);
+            if (policySelect && rateInput) {
+                function updatePreview() {
+                    const selectedOption = policySelect.options[policySelect.selectedIndex];
+                    const premium = parseFloat(selectedOption.getAttribute('data-premium')) || 0;
+                    const rate = parseFloat(rateInput.value) || 0;
+                    const commission = (premium * rate / 100).toFixed(2);
 
-                premiumDisplay.innerHTML = '&#8377;' + premium.toFixed(2);
-                rateDisplay.textContent = rate + '%';
-                commissionDisplay.innerHTML = '&#8377;' + commission;
+                    premiumDisplay.innerHTML = '&#8377;' + premium.toFixed(2);
+                    rateDisplay.textContent = rate + '%';
+                    commissionDisplay.innerHTML = '&#8377;' + commission;
+                }
+
+                policySelect.addEventListener('change', updatePreview);
+                rateInput.addEventListener('input', updatePreview);
+                
+                // Initial update
+                updatePreview();
             }
-
-            policySelect.addEventListener('change', updatePreview);
-            rateInput.addEventListener('input', updatePreview);
-            
-            // Initial update
-            updatePreview();
         });
     </script>
 }
