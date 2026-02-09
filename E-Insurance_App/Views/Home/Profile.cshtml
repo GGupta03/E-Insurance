@@ -1,0 +1,138 @@
+@model E_Insurance_App.Models.Entities.User
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h2>My Profile</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <strong>Profile Information</strong>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                         style="width: 100px; height: 100px; font-size: 2.5rem;">
+                        @Model.FirstName[0]@Model.LastName[0]
+                    </div>
+                    <h4 class="mt-3">@Model.FirstName @Model.LastName</h4>
+                    <span class="badge @(Model.Role == "Admin" ? "bg-danger" : Model.Role == "Agent" ? "bg-info" : Model.Role == "Employee" ? "bg-warning" : "bg-success") fs-6">
+                        @Model.Role
+                    </span>
+                </div>
+                
+                <hr />
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted">Email Address</label>
+                    <p class="form-control-plaintext fw-bold">@Model.Email</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted">Full Name</label>
+                    <p class="form-control-plaintext fw-bold">@Model.FirstName @Model.LastName</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted">Role</label>
+                    <p class="form-control-plaintext fw-bold">@Model.Role</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted">Account Status</label>
+                    <p class="form-control-plaintext">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactive</span>
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <strong>Quick Links</strong>
+            </div>
+            <div class="card-body">
+                @if (Model.Role == "Admin")
+                {
+                    <div class="list-group">
+                        <a asp-controller="Admin" asp-action="Dashboard" class="list-group-item list-group-item-action">
+                            <strong>Admin Dashboard</strong>
+                            <small class="d-block text-muted">Manage users, policies, and commissions</small>
+                        </a>
+                        <a asp-controller="User" asp-action="Index" class="list-group-item list-group-item-action">
+                            <strong>Manage Users</strong>
+                            <small class="d-block text-muted">Create and manage user accounts</small>
+                        </a>
+                        <a asp-controller="Commission" asp-action="Index" class="list-group-item list-group-item-action">
+                            <strong>Commission Management</strong>
+                            <small class="d-block text-muted">Calculate and assign agent commissions</small>
+                        </a>
+                    </div>
+                }
+                else if (Model.Role == "Customer")
+                {
+                    <div class="list-group">
+                        <a asp-controller="Policy" asp-action="MyPolicies" class="list-group-item list-group-item-action">
+                            <strong>My Policies</strong>
+                            <small class="d-block text-muted">View your purchased policies</small>
+                        </a>
+                        <a asp-controller="Payment" asp-action="Index" class="list-group-item list-group-item-action">
+                            <strong>Payment History</strong>
+                            <small class="d-block text-muted">View your payment transactions</small>
+                        </a>
+                        <a asp-controller="Policy" asp-action="Available" class="list-group-item list-group-item-action">
+                            <strong>Browse Policies</strong>
+                            <small class="d-block text-muted">Explore available insurance policies</small>
+                        </a>
+                        <a asp-controller="Premium" asp-action="Calculate" class="list-group-item list-group-item-action">
+                            <strong>Premium Calculator</strong>
+                            <small class="d-block text-muted">Calculate your premium estimate</small>
+                        </a>
+                    </div>
+                }
+                else if (Model.Role == "Agent")
+                {
+                    <div class="list-group">
+                        <a asp-controller="Premium" asp-action="Calculate" class="list-group-item list-group-item-action">
+                            <strong>Premium Calculator</strong>
+                            <small class="d-block text-muted">Calculate premiums for customers</small>
+                        </a>
+                        <a asp-controller="Policy" asp-action="Available" class="list-group-item list-group-item-action">
+                            <strong>Available Policies</strong>
+                            <small class="d-block text-muted">View available insurance policies</small>
+                        </a>
+                    </div>
+                }
+                else if (Model.Role == "Employee")
+                {
+                    <div class="list-group">
+                        <a asp-controller="Premium" asp-action="Calculate" class="list-group-item list-group-item-action">
+                            <strong>Premium Calculator</strong>
+                            <small class="d-block text-muted">Calculate premium estimates</small>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <a asp-controller="Account" asp-action="Logout" class="btn btn-outline-danger w-100">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
