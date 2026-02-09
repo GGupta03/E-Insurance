@@ -7,6 +7,24 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/E_Insurance_App.styles.css" asp-append-version="true" />
+    <style>
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #6c757d;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .user-avatar:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -18,12 +36,32 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @{
-                            var userRole = Context.Session.GetString("UserRole");
-                            var isLoggedIn = Context.Session.GetInt32("UserId") != null;
-                        }
+                    @{
+                        var userRole = Context.Session.GetString("UserRole");
+                        var userEmail = Context.Session.GetString("UserEmail");
+                        var isLoggedIn = Context.Session.GetInt32("UserId") != null;
                         
+                        // Get initials from email or session
+                        var initials = "U";
+                        if (!string.IsNullOrEmpty(userEmail))
+                        {
+                            var parts = userEmail.Split('@')[0].Split('.');
+                            if (parts.Length >= 2)
+                            {
+                                initials = (parts[0][0].ToString() + parts[1][0].ToString()).ToUpper();
+                            }
+                            else if (parts.Length == 1 && parts[0].Length >= 2)
+                            {
+                                initials = parts[0].Substring(0, 2).ToUpper();
+                            }
+                            else if (parts.Length == 1)
+                            {
+                                initials = parts[0][0].ToString().ToUpper();
+                            }
+                        }
+                    }
+                    
+                    <ul class="navbar-nav flex-grow-1">
                         @if (isLoggedIn && userRole == "Admin")
                         {
                             <li class="nav-item">
@@ -52,17 +90,6 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Premium" asp-action="Calculate">Premium Calculator</a>
                             </li>
-                            
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">
-                                    @Context.Session.GetString("UserEmail")
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Profile">Profile</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a></li>
-                                </ul>
-                            </li>
                         }
                         else
                         {
@@ -74,6 +101,24 @@
                             </li>
                         }
                     </ul>
+                    
+                    @if (isLoggedIn)
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle p-0 d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="user-avatar">@initials</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li class="dropdown-header">@userEmail</li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Home" asp-action="Profile">Profile</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>
